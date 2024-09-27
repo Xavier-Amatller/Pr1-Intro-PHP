@@ -81,8 +81,17 @@ echo "7) Calcula la media de las notas y muéstrala con solo 2 decimales. Ademá
 nombres de los alumnos cuya nota esté por encima de la media. 
 <br><br>";
 
-echo "La media es: " . round((array_sum($array) / count($array)), 2) . "<br><br>   ";
+$notaMedia = round((array_sum($array) / count($array)), 2);
+echo "La media es: " . $notaMedia . "<br><br>   ";
 
+echo "Alumnos por encima: <br>" ;
+
+foreach ($array as $key => $value) {
+    if($value>$notaMedia){
+        echo " - $key <br>";
+    }
+}
+echo "<br>";
 echo "8) Busca en el array la nota más alta (debe hacerse mediante código). Muestra la nota y
 el nombre del mejor alumno de la clase. Deberá funcionar para cualquier valor del
 array. 
