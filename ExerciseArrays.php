@@ -74,7 +74,7 @@ $array = [
 arsort($array);
 
 foreach ($array as $key => $value) {
-    echo "" .$key." ". $value . "<br>";
+    echo "" . $key . " " . $value . "<br>";
 }
 
 echo "7) Calcula la media de las notas y muéstrala con solo 2 decimales. Además, muestra los
