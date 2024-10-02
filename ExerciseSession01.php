@@ -16,51 +16,45 @@ caso mostrar error.
 <br><br>";
 $_SESSION["error"] = "";
 
-if (isset($_POST["worker"])) {
+if (isset($_POST["worker"]) && isset($_POST["productQuantity"])) {
+ 
+    isset($_SESSION["unitsMilk"]) ? $unitsMilk = $_SESSION["unitsMilk"] : $unitsMilk = 0;
+    isset($_SESSION["unitsSoftDrink"]) ? $unitsSoftDrink = $_SESSION["unitsSoftDrink"] : $unitsSoftDrink = 0;
+    $product = $_POST["product"];
+    $productQuantity = $_POST["productQuantity"];
 
     $_SESSION["lastWorkerOnModify"] = $_POST["worker"];
 
     switch ($_POST["changeOnInventory"]) {
         case 'add':
-            switch ($_POST["product"]) {
+            switch ($product) {
                 case 'milk':
-                    isset($_SESSION["unitsMilk"]) ? $_SESSION["unitsMilk"] += $_POST["productQuantity"] : $_SESSION["unitsMilk"] = $_POST["productQuantity"];
+                    $unitsMilk += $productQuantity;
                     break;
 
                 case 'softDrink':
-                    isset($_SESSION["unitsSoftDrink"]) ? $_SESSION["unitsSoftDrink"] += $_POST["productQuantity"] : $_SESSION["unitsSoftDrink"] = $_POST["productQuantity"];
+                    $unitsSoftDrink += $productQuantity;
                     break;
             }
             break;
 
         case 'remove':
-            switch ($_POST["product"]) {
+            switch ($product) {
                 case 'milk':
-                    if (isset($_SESSION["unitsMilk"])) {
-                        if ($_SESSION["unitsMilk"] - $_POST["productQuantity"] >= 0) {
-                            $_SESSION["unitsMilk"] -= $_POST["productQuantity"];
-                        } else {
-                            $_SESSION["error"] = "Estas intentando borrar mas milk de la que hay";
-                        };
-                    } else {
-                        $_SESSION["unitsMilk"] = 0;
-                    };
+                    $unitsMilk - $productQuantity >= 0 ? $unitsMilk -= $productQuantity : $_SESSION["error"] = "Estas intentando borrar mas milk de la que hay";
                     break;
 
                 case 'softDrink':
-                    if (isset($_SESSION["unitsSoftDrink"])) {
-                        if ($_SESSION["unitsSoftDrink"] - $_POST["productQuantity"] >= 0) {
-                            $_SESSION["unitsSoftDrink"] -= $_POST["productQuantity"];
-                        } else {
-                            $_SESSION["error"] =  "Estas intentando borrar mas softDrink de la que hay";
-                        };
-                    } else {
-                        $_SESSION["unitsSoftDrink"] = 0;
-                    };
+                    $unitsSoftDrink - $productQuantity >= 0 ? $unitsSoftDrink -= $productQuantity : $_SESSION["error"] =  "Estas intentando borrar mas softDrink de la que hay";
+                    break;
             }
-            break;
     }
+    $_SESSION["unitsMilk"] = $unitsMilk;
+    $_SESSION["unitsSoftDrink"] = $unitsSoftDrink;
+}else{
+    $_SESSION["error"] = "Rellena todos los campos";
 }
+
 ?>
 <!DOCTYPE html>
 
@@ -73,14 +67,14 @@ if (isset($_POST["worker"])) {
 <body>
     <form action="" method="post">
         <h1>SUPERMARKET MANAGEMENT</h1>
-        worker name <input type="text" name="worker"><br>
+        worker name <input type="text" name="worker" required><br>
         <h2>Choose product</h2>
         <select name="product" id="product">
             <option value="milk">milk</option>
             <option value="softDrink">softDrink</option>
         </select>
         <h2>Product quantity</h2>
-        <input type="number" name="productQuantity">
+        <input type="number" name="productQuantity" required>
         <input type="submit" name="changeOnInventory" id="add" value="add">
         <input type="submit" name="changeOnInventory" id="remove" value="remove">
         <input type="reset" value="reset">
@@ -95,18 +89,18 @@ if (isset($_POST["worker"])) {
         units milk: <div class="unitsMilk">
             <?php
             if (isset($_SESSION["unitsMilk"])) {
-                echo $_SESSION["unitsMilk"] ;
+                echo $_SESSION["unitsMilk"];
             }
             ?>
         </div>
         units soft drink: <div class="unitsSoftDrink">
             <?php
             if (isset($_SESSION["unitsSoftDrink"])) {
-                echo $_SESSION["unitsSoftDrink"] ;
+                echo $_SESSION["unitsSoftDrink"];
             }
             ?>
         </div>
-        <?php  echo $_SESSION["error"]?>
+        <?php echo $_SESSION["error"] ?>
     </form>
 </body>
 
