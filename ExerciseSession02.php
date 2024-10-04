@@ -1,6 +1,58 @@
 <?php
-echo "<h1>Crea un php con un array inicial con 3 valores numéricos. </h1><br><br>";
-echo "a) Se debe mantener el nombre del trabajador que está uƟlizando la aplicación.<br><br>";
-echo "b) Se debe poder añadir y quitar leche o refresco seleccionando de una lista<br><br>";
-echo "c) Se debe controlar que no se pueden quitar mas unidades de las que haya, en ese
-caso mostrar error<br><br>";
+session_start();
+
+if (!isset($_SESSION["array"])) {
+    $_SESSION["array"] = [10, 20, 30];
+}
+
+if (isset($_GET["modify"])) {
+    $_SESSION["array"][$_GET["position"]] = $_GET["nuevoValor"];
+}
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio2 Sesiones</title>
+</head>
+
+<body>
+    <form action="" method="get">
+        <h1>Modify array saved in session</h1>
+        Position to Modify
+        <select name="position">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+        <br><br>
+        New value: <input type="number" name="nuevoValor" value="0">
+        <br><br>
+        <input type="submit" name="modify" value="Modify">
+        <input type="submit" name="average" value="Average">
+        <input type="reset">
+    </form>
+    <br>
+    Current Array <div style="display: inline;">
+        <?php
+        foreach ($_SESSION["array"] as $value)
+            echo $value . ",";
+        ?>
+    </div>
+    <br><br>
+
+    <div>
+        <?php
+        if (isset($_GET["average"])) {
+            echo "Average: " . array_sum($_SESSION["array"]) / count($_SESSION["array"]);
+        }
+        ?>
+    </div>
+</body>
+
+</html>
